@@ -1,0 +1,6 @@
+# Core testing tools
+pytest>=7.0.0
+requests>=2.28.0
+
+# Reporting
+allure-pytest>=2.9.43
