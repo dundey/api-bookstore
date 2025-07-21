@@ -5,7 +5,7 @@ on:
   pull_request:
 
 permissions:
-  contents: write 
+  contents: write
   pages: write
 
 jobs:
@@ -75,3 +75,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: reports/html
+
+      - name: View Allure report → https://dundey.github.io/api-bookstore/
+        run: echo
