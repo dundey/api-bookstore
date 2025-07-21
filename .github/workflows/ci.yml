@@ -7,23 +7,18 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    outputs:
-      report-path: reports/html
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Cache pip
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
@@ -42,18 +37,8 @@ jobs:
         run: |
           allure generate reports/ -o reports/html --clean
 
-      - name: Upload Pages Artifact
-        id: page-artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Upload Allure HTML Report
+        uses: actions/upload-artifact@v4 
         with:
+          name: allure-report
           path: reports/html
-
-  deploy:
-    needs: test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
