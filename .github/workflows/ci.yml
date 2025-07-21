@@ -43,17 +43,20 @@ jobs:
       - name: Prevent Jekyll filtering
         run: touch reports/html/.nojekyll
 
-  deploy:
+  report:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout code
+      - name: Checkout (full history)
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Publish Allure report to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
           publish_dir: ./reports/html
