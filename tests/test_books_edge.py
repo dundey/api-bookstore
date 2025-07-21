@@ -3,7 +3,7 @@ import allure
 
 allure.dynamic.suite("Books - Edge Cases")
 
-@allure.title("Requesting a book with invalid ID returns 400 or 404 and no 'id' key")
+@allure.title("Requesting a book with invalid ID")
 @pytest.mark.edge
 @pytest.mark.parametrize("invalid_id", [-1, 0, 999999])
 def test_get_book_with_invalid_ids(session, base_url, invalid_id):
@@ -17,7 +17,7 @@ def test_get_book_with_invalid_ids(session, base_url, invalid_id):
         data = r.json() or {}
         assert "id" not in data
 
-@allure.title("Creating a book with minimal payload returns 200 and an id")
+@allure.title("Creating a book with minimal payload")
 @pytest.mark.edge
 def test_create_book_with_minimal_payload(session, base_url):
     with allure.step("POST /Books with minimal payload"):

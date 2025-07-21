@@ -1,37 +1,56 @@
 # API Automation Testing: Online Bookstore
 
 ## Prerequisites
-- Python 3.9+ (ensure `python3` is installed)
-- Git
-- Allure
 
-## Setup (MacOS/Linux)
+- Brew (optional for MacOs)
+- Python 3.9+ (ensure python3 is in your PATH)
+- Git
+
+## Setup
+
+### Install Allure CLI (optional for local reports)
+
 ```bash
-# Create a virtual environment
+brew install allure
+```
+
+### Clone the repo
+```bash
+git clone https://github.com/dundey/api-bookstore
+cd api-bookstore
+```
+
+### Create & activate virtualenv
+```bash
 python3 -m venv .venv
-# Activate it
 source .venv/bin/activate
-# Install project dependencies
-pip3 install -r requirements.txt
+```
+
+### Install dependencies
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
 
 ## Running tests
+
 ```bash
 pytest --alluredir=reports/
 ```
 
-## Generating report
-
-Temporery report:
+## Generating and opening Allure report
 ```bash
-allure serve reports/
-```
-
-Permanent report:
-```bash
-allure generate reports/ -o reports/html --clean
-allure open reports/html
+allure generate reports/ -o reports/html --clean && allure open reports/html
 ```
 
 ## CI/CD
 
-GitHub Actions runs tests on push/PR, generates a permanent Allure HTML report, and uploads it as an artifact.
+The project includes GitHub Actions in .github/workflows/ci.yml, which will:
+
+1. Run tests on push/PR
+2. Generate Allure HTML report
+3. Publish to GitHub Pages
+4. Attach a ZIP of the report as a build artifact
+
+For this demo/task the latest pipeline report will always be available at: https://dundey.github.io/api-bookstore/
+
