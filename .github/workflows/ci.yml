@@ -44,7 +44,7 @@ jobs:
         run: touch reports/html/.nojekyll
 
       - name: Upload Allure HTML Report
-        uses: actions/upload-artifact@v4     # bumped to v4
+        uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: reports/html
@@ -57,6 +57,7 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+
     steps:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
