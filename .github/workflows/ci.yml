@@ -5,19 +5,19 @@ on:
   pull_request:
 
 permissions:
-  contents: write
-  pages: write
+  contents: write    
+  pages: write     
 
 env:
   REPORT_URL: https://dundey.github.io/api-bookstore/
 
 jobs:
   test-and-deploy:
-    name: ▶️ Run API Automation Tests
+    name: ▶️ Test & Deploy Allure Report
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🔄 Checkout repository
+      - name: 🔄 Checkout repo
         uses: actions/checkout@v3
 
       - name: 📦 Cache Python deps
@@ -59,7 +59,19 @@ jobs:
           force_orphan: true
           keep_files: false
 
-      - name: 📝 Add report link to summary
+      - name: 📦 Archive report for instant download
         run: |
-          echo "## View Latest Allure Report" >> $GITHUB_STEP_SUMMARY
-          echo "- [Click here]($REPORT_URL)" >> $GITHUB_STEP_SUMMARY
+          cd reports/html
+          zip -r ../../allure-report.zip ./*
+
+      - name: 📤 Upload report ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-zip
+          path: allure-report.zip
+
+      - name: 📝 Add report links to summary
+        run: |
+          echo "## Allure Report Links" >> $GITHUB_STEP_SUMMARY
+          echo "- 🎁 [Download latest report ZIP](artifact://allure-report-zip)" >> $GITHUB_STEP_SUMMARY
+          echo "- 🌐 [View live report (may take ~1 min)]($REPORT_URL)" >> $GITHUB_STEP_SUMMARY
