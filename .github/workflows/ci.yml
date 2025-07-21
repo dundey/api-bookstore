@@ -5,8 +5,8 @@ on:
   pull_request:
 
 permissions:
-  contents: write  
-  pages: write    
+  contents: write
+  pages: write
 
 env:
   REPORT_URL: https://dundey.github.io/api-bookstore/
@@ -56,8 +56,8 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: reports/html
+          force_orphan: true       
+          keep_files: false       
 
-      - name: 🔗 Add report link to summary
-        run: |
-          echo "## Allure Report" >> $GITHUB_STEP_SUMMARY
-          echo "- [View latest report]($REPORT_URL)" >> $GITHUB_STEP_SUMMARY
+      - name: 🔗 View latest report → ${{ env.REPORT_URL }}
+        run: echo
