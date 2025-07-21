@@ -5,8 +5,8 @@ on:
   pull_request:
 
 permissions:
-  contents: read
-  pages: write
+  contents: write  
+  pages: write    
 
 jobs:
   test:
@@ -48,13 +48,13 @@ jobs:
       - name: Add .nojekyll
         run: touch reports/html/.nojekyll
 
-      - name: Upload Allure HTML Report
+      - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: reports/html
 
-  deploy:
+  publish:
     name: Deploy Allure Report
     needs: test
     runs-on: ubuntu-latest
