@@ -1,23 +1,23 @@
-name: API Automation & Reporting
+name: API Test & Report
 
 on:
   push:
   pull_request:
 
 permissions:
-  contents: write  
-  pages: write    
+  contents: write 
+  pages: write
 
 jobs:
-  test:
-    name: Run API Automation Tests
+  run-tests:
+    name: ▶️ Run API Automation Tests
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: 🔄 Checkout repository
         uses: actions/checkout@v3
 
-      - name: Cache Python packages
+      - name: 📦 Cache Python deps
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
@@ -25,52 +25,51 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Set up Python 3.9
+      - name: 🐍 Setup Python 3.9
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
-      - name: Install dependencies
+      - name: 📥 Install dependencies
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Allure CLI
+      - name: 📊 Install Allure CLI
         run: npm install --global allure-commandline@2.24.0
 
-      - name: Execute tests
+      - name: 🧪 Execute tests
         run: pytest --maxfail=1 --exitfirst --alluredir=reports/
 
-      - name: Generate Allure report
-        run: |
-          allure generate reports/ -o reports/html --clean
+      - name: ⚙️ Generate Allure report
+        run: allure generate reports/ -o reports/html --clean
 
-      - name: Add .nojekyll
+      - name: 🚫 Prevent Jekyll filtering
         run: touch reports/html/.nojekyll
 
-      - name: Upload report artifact
+      - name: 📤 Upload test report artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: reports/html
 
-  publish:
-    name: Deploy Allure Report
-    needs: test
+  deploy-report:
+    name: 🚀 Deploy Allure Report to Pages
+    needs: run-tests
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Checkout repository
+      - name: 🔄 Checkout repository
         uses: actions/checkout@v3
 
-      - name: Download report artifact
+      - name: 📥 Download report artifact
         uses: actions/download-artifact@v4
         with:
           name: allure-report
           path: reports/html
 
-      - name: Publish to GitHub Pages
+      - name: 🌐 Publish to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
