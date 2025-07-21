@@ -32,9 +32,11 @@ jobs:
 
       - name: Install Allure CLI
         run: |
-          sudo apt-add-repository ppa:qameta/allure -y
-          sudo apt-get update
-          sudo apt-get install -y allure
+          # download and unpack Allure
+          wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.22.1/allure-commandline-2.22.1-linux.tgz
+          tar -zxvf allure-commandline-2.22.1-linux.tgz
+          sudo mv allure-2.22.1 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
 
       - name: Run Tests
         run: pytest --maxfail=1 --exitfirst --alluredir=reports/
