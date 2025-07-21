@@ -56,8 +56,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: reports/html
-          force_orphan: true       
-          keep_files: false       
+          force_orphan: true
+          keep_files: false
 
-      - name: 🔗 View latest report → ${{ env.REPORT_URL }}
-        run: echo
+      - name: 📝 Add report link to summary
+        run: |
+          echo "## View Latest Allure Report" >> $GITHUB_STEP_SUMMARY
+          echo "- [Click here]($REPORT_URL)" >> $GITHUB_STEP_SUMMARY
