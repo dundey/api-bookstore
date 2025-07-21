@@ -1,7 +1,7 @@
 import pytest
 import allure
 
-allure.dynamic.suite("Authors - Edge Cases")
+allure.dynamic.suite("Authors - Edge Cases") 
 
 @allure.title("Requesting an author with invalid ID returns 400 or 404 and no 'id' key")
 @pytest.mark.edge
