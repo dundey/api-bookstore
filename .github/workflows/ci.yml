@@ -37,8 +37,18 @@ jobs:
         run: |
           allure generate reports/ -o reports/html --clean
 
-      - name: Upload Allure HTML Report
-        uses: actions/upload-artifact@v4 
+      - name: Prevent Jekyll filtering
+        run: touch reports/html/.nojekyll
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          name: allure-report
           path: reports/html
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/deploy-pages@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
