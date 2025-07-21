@@ -43,24 +43,17 @@ jobs:
       - name: Prevent Jekyll filtering
         run: touch reports/html/.nojekyll
 
-      - name: Upload Allure HTML Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: reports/html
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: reports/html
-
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Publish Allure report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-            
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./reports/html
