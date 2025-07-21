@@ -7,6 +7,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    outputs:
+      report-path: reports/html
 
     steps:
       - name: Checkout code
@@ -40,8 +42,18 @@ jobs:
         run: |
           allure generate reports/ -o reports/html --clean
 
-      - name: Upload Allure HTML Report
-        uses: actions/upload-artifact@v4
+      - name: Upload Pages Artifact
+        id: page-artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          name: allure-report
           path: reports/html
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
